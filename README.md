@@ -58,7 +58,7 @@ $ bisect 00 < testfile
 
 If that didn't work, you might try:
 
-`bisect 01' < testfile`
+`bisect 01 < testfile`
 
 which prints the first half plus the *second* half of the remainder,
 omitting `05-echo` and `06-foxtrot`.
