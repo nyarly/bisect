@@ -11,15 +11,17 @@ digit will "add in" half of the remaining lines, with a 0 or 1 indicating
 which half.
 
 By progressively adding digits you can bisectively rebuild the original
-input, excluding a smaller and smaller subset each time.  
+input, excluding a smaller subset each time.  
 
-Uses include figuring out which library is breaking
-your build, by progressively including the others.   
+This can be useful for debugging: for example including progressively
+larger subsets of a test suite, included libraries, or other list
+where an unknown element of the list is causing a problem.
 
 ## Example
 
 Consider this eight-line text file:
 ```
+$ cat testfile
 01-alpha
 02-bravo
 03-charlie
@@ -30,10 +32,9 @@ Consider this eight-line text file:
 08-hotel
 ```
 
-`bisect 0 < testfile`
-
-will print the first half of the input:
+Running `bisect 0 < testfile` will print the first half of the input:
 ```
+$ bisect 0 < testfile
 01-alpha
 02-bravo
 03-charlie
@@ -42,10 +43,11 @@ will print the first half of the input:
 
 Suppose that worked, and you want to try including two more lines.
 
-`bisect 00 < testfile`
-will print the first half and the first half of what remains, so
+Running `bisect 00 < testfile`
+will print the first half, plus the first half of the remainder, totaling
 three-fourths of the file:
 ```
+$ bisect 00 < testfile
 01-alpha
 02-bravo
 03-charlie
@@ -55,11 +57,14 @@ three-fourths of the file:
 ```
 
 If that didn't work, you might try:
+
 `bisect 01' < testfile`
+
 which prints the first half plus the *second* half of the remainder,
-omitting `05-echo`, `06-foxtrot`.
+omitting `05-echo` and `06-foxtrot`.
 
 ```
+$ bisect 01 < testfile
 01-alpha
 02-bravo
 03-charlie
@@ -73,6 +78,7 @@ Proceeding to
 entries:
 
 ```
+$ bisect 010 < testfile
 01-alpha
 02-bravo
 03-charlie
@@ -88,7 +94,7 @@ entry in your original list.
 For a long list, the `comm` (common entries) command combines
 well with `bisect` to help identify the excluded line(s).
 
-`comm testfile <(bisect BITS < testfile)`
+`comm testfile2 <(bisect BITS < testfile2)`
 
 which will produce output like
 
