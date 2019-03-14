@@ -74,7 +74,7 @@ $ bisect 01 < testfile
 ```
 
 Proceeding to
-`bisect 010' < testfile` would print seven of the original eight
+`bisect 010 < testfile` would print seven of the original eight
 entries:
 
 ```
