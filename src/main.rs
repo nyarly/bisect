@@ -27,7 +27,7 @@ fn main() -> Result<(), String>{
 }
 
 fn ranges(sz: usize, bitstring: String) -> Result<Vec<Range<usize>>, String> {
-  let (v, _) = bools(bitstring)?.iter().fold((vec![], 0..sz), |(mut v, r), b| {
+  let (mut v, _) = bools(bitstring)?.iter().fold((vec![], 0..sz), |(mut v, r), b| {
     let (top, bottom) = range_halves(r);
     if *b {
       v.push(bottom);
@@ -37,6 +37,8 @@ fn ranges(sz: usize, bitstring: String) -> Result<Vec<Range<usize>>, String> {
       (v, bottom)
     }
   });
+
+  v.sort_by_key(|r| r.start);
 
   Ok(v)
 }

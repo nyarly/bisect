@@ -1,7 +1,10 @@
 [package]
-name = "file-bisect"
+name = "bisect"
 version = "0.1.0"
 authors = ["Judson <nyarly@gmail.com>"]
 edition = "2018"
+description = "Bisect search stdin based on a bitstring pattern"
+license = "MIT"
+readme = "./README.md"
 
 [dependencies]
