@@ -7,6 +7,8 @@ description = "Bisect search stdin based on a bitstring pattern"
 license = "MIT"
 readme = "./README.md"
 repository = "https://github.com/nyarly/bisect"
+keywords = ["cli", "tool", "search", "text", "unix"]
+categories = ["command-line-utilities", "text-processing"]
 
 [dependencies]
 clap = "^2.32.0"
