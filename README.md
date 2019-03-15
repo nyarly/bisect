@@ -11,7 +11,7 @@ digit will "add in" half of the remaining lines, with a 0 or 1 indicating
 which half.
 
 By progressively adding digits you can bisectively rebuild the original
-input, excluding a smaller subset each time.  
+input, excluding a smaller subset each time.
 
 This can be useful for debugging: for example including progressively
 larger subsets of a test suite, included libraries, or other list
