@@ -35,7 +35,7 @@ $ cat testfile
 Running `bisect 0 < testfile` will print the first half of the input:
 ```
 $ bisect 0 < testfile
-01-alpha
+01-alfa
 02-bravo
 03-charlie
 04-delta
@@ -44,85 +44,107 @@ $ bisect 0 < testfile
 Suppose that worked, and you want to try including two more lines.
 
 Running `bisect 00 < testfile`
-will print the first half, plus the first half of the remainder, totaling
-three-fourths of the file:
+will print the first quarter of the file:
 ```
 $ bisect 00 < testfile
-01-alpha
+01-alfa
 02-bravo
-03-charlie
-04-delta
-05-echo
-06-foxtrot
 ```
 
 If that didn't work, you might try:
 
 `bisect 01 < testfile`
 
-which prints the first half plus the *second* half of the remainder,
-omitting `05-echo` and `06-foxtrot`.
+which prints the second quarter:
 
 ```
 $ bisect 01 < testfile
-01-alpha
-02-bravo
 03-charlie
 04-delta
-07-golf
-08-hotel
 ```
 
 Proceeding to
-`bisect 010 < testfile` would print seven of the original eight
-entries:
-
+`bisect 010 < testfile` would print the 3rd 8th
+(just line 3, in this case):
 ```
 $ bisect 010 < testfile
-01-alpha
-02-bravo
 03-charlie
-04-delta
-05-echo
-07-golf
-08-hotel
 ```
 
-If that works, you have identified `06-foxtrot` as the "problematic"
+If that works, you have identified `03-foxtrot` as the "problematic"
 entry in your original list.
+
+The general principle is to use `bisect`
+in some kind of shell one liner
+or throwaway script
+and run it successively,
+adding 0s when things work,
+and toggling the last 0 to a 1 when they break.
+
+### Experimenting
+
+The behavior of `bisect` can be unintuitive at first.
+To get a feel for it,
+it can help to run through a sample file,
+building up the selection string to see what gets selected.
 
 For a long list, the `comm` (common entries) command combines
 well with `bisect` to help identify the excluded line(s).
 
-`comm testfile2 <(bisect BITS < testfile2)`
-
-which will produce output like
-
 ```
-		abrupt
-		clam
-		cloth
-		eggs
-		elfin
-		fanatical
+$ comm testfile2 <(bisect 101 < testfile2)`
+abrupt
+clam
+cloth
+eggs
+elfin
+fanatical
 future
 giants
 glow
-		group
-		guess
-		messy
-		object
-		puncture
-		replace
+group
+guess
+messy
+object
+puncture
+replace
 		silk
 		special
 		sticks
-		store
-		thoughtless
-		troubled
-		unable
-		zippy
-		zoom
+store
+thoughtless
+troubled
+unable
+zippy
+zoom
+```
+
+### Invert
+
+Because the case of
+needing a _growing_ list of test entries
+is a common one,
+`bisect` has an `--invert` flag,
+which simply suppresses the selected lines,
+rather than selectively printing them.
+
+Compare
+```
+$ bisect 01 < testfile
+03-charlie
+04-delta
+```
+
+with
+
+```
+$ bisect -i 01 < testfile
+01-alfa
+02-bravo
+05-echo
+06-foxtrot
+07-golf
+08-hotel
 ```
 
 ## Motivation
